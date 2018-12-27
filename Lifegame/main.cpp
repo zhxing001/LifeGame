@@ -258,8 +258,8 @@ void lifeGame(Mat &init_image, int loop_num, bool writeImg,int ms)
 	imshow("source", init_image);
 
 	//k是迭代次数
-	namedWindow("LIFE_GAME", 1);
-	for (int k = 0; k < 100000; k++)
+	namedWindow("LIFE_GAME", 2);
+	for (int k = 0; k < loop_num; k++)
 	{
 		cout << k << endl;
 		Mat tmp = Mat::zeros(rows, cols, CV_8UC1);
@@ -304,16 +304,31 @@ void lifeGame(Mat &init_image, int loop_num, bool writeImg,int ms)
 	}
 }
 
+void randomMap(Mat &init_image,Size2d &sz,double rate=0.375)
+{
+	RNG rng;
+	init_image = Mat::zeros(sz,CV_8UC1);
+	for (int i = 0; i < sz.height; i++)
+	{
+		for (int j = 0; j < sz.width; j++)
+		{
+			init_image.at<uchar>(i, j) = rng.uniform(0, 255);
+		}
+	}
+	threshold(init_image, init_image, (1 - rate) * 255, 255, THRESH_BINARY);
+}
+
 int main()
 {
-	string cfg("cfg//gun1.txt");     //读取配置文件
+	string cfg("cfg//airplane.txt");     //读取配置文件
 	vector<Point2d> CfgMat;                  //配置矩阵存储
 	int cmax=0;
 	int rmax=0;
 	getPos(cfg, CfgMat, rmax, cmax);
 	cout << rmax <<" "<<cmax << endl;
 	Mat init_image;
-	buildMap(init_image, CfgMat, rmax, cmax, 5, 2);
-	lifeGame(init_image,1000,true,100);
+	randomMap(init_image, Size2d(2000, 2000));
+	//buildMap(init_image, CfgMat, rmax, cmax, 2, 2);
+	lifeGameEdge(init_image,10000,false,1);
 	return 0;
 }

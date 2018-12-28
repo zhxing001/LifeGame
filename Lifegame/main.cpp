@@ -56,8 +56,7 @@ void getPos(string &file, vector<Point2d> &CfgMat, int &rmax,int &cmax)
 			cmax = _cmax;
 		if (_rmax > rmax)
 			rmax = _rmax;
-
-	}      //最后实际上多记录了一列，这里减掉
+	} 
 }
 
 /*
@@ -320,15 +319,16 @@ void randomMap(Mat &init_image,Size2d &sz,double rate=0.375)
 
 int main()
 {
-	string cfg("cfg//airplane.txt");     //读取配置文件
+	string cfg("cfg//x.txt");     //读取配置文件
 	vector<Point2d> CfgMat;                  //配置矩阵存储
 	int cmax=0;
 	int rmax=0;
 	getPos(cfg, CfgMat, rmax, cmax);
 	cout << rmax <<" "<<cmax << endl;
 	Mat init_image;
-	randomMap(init_image, Size2d(2000, 2000));
-	//buildMap(init_image, CfgMat, rmax, cmax, 2, 2);
-	lifeGameEdge(init_image,10000,false,1);
+	//randomMap(init_image, Size2d(2000, 2000));
+	buildMap(init_image, CfgMat, rmax, cmax, 2, 2);
+	lifeGameEdge(init_image,10000,true,1);
+	
 	return 0;
 }
